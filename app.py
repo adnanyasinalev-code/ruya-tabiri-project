@@ -7,89 +7,86 @@ import time
 # ---------------------------------------------------------
 st.set_page_config(page_title="Derin Rüya Analizi", page_icon="🌙", layout="centered")
 
-# API Anahtarı Ayarı
-# (Bilgisayarında çalıştırırken buraya kendi 'sk-...' şifreni yazabilirsin.
-# GitHub'a atarken st.secrets kalmalı.)
-if "OPENAI_API_KEY" in st.secrets:
-    api_key = st.secrets["OPENAI_API_KEY"]
-else:
-    # Buraya kendi anahtarını test için yazabilirsin, GitHub'a atarken silmeyi unutma.
-    api_key = "sk-proj-..." 
+# DİKKAT: Buraya kendi 'sk-' ile başlayan şifreni tekrar yapıştırman gerekebilir 
+# (Eğer st.secrets kullanıyorsan bu satırı silip st.secrets satırını açabilirsin)
+# Şimdilik senin kolayca yapıştırman için değişkeni buraya koyuyorum:
+api_key = st.secrets["OPENAI_API_KEY"] 
+# Eğer bilgisayarında hata alırsan yukarıdaki satırı silip tırnak içinde şifreni yaz: api_key = "sk-..."
 
 # ---------------------------------------------------------
-# 2. SİSTEM PROMPT (Daha Sıkı Filtreli Beyin)
+# 2. SİSTEM PROMPT (Yapay Zekanın Yeni Beyni)
 # ---------------------------------------------------------
 system_prompt = """
 Sen Kâhin adında, kadim bilgilere sahip bilge bir rüya tabircisisin.
+Görevin kullanıcıların rüyalarını İslami (İbn-i Sirin) ve Modern Psikoloji (Jung) senteziyle yorumlamak.
 
-GÖREVİNİ ŞU SIRAYLA YAP (ÇOK ÖNEMLİ):
+KURALLARIN ŞUNLARDIR:
+1. **Uzun ve Detaylı Yaz:** Kullanıcı tatmin olmalı. Cevap en az 3-4 dolgun paragraf olsun.
+2. **Yapılandırılmış Cevap Ver:**
+   - Önce rüyadaki sembollerin derin anlamlarını açıkla.
+   - Sonra kişinin şu anki ruh halini ve bilinçaltını analiz et.
+   - EN ÖNEMLİSİ: Rüyadan yola çıkarak kişiye "Gelecek Tavsiyeleri" ver (Şundan sakın, şu fırsatı değerlendir gibi).
+3. **Üslup:** Mistik, edebi, kucaklayıcı ve bilge bir dil kullan.
+4. **Kapanış:** Yorumun EN SONUNDA mutlaka "Hayırlara vesile olsun..." cümlesini kullan. Başta kullanma.
 
-ADIM 1: GİRDİYİ KONTROL ET
-Kullanıcının yazdığı metni analiz et.
-- Eğer metin rastgele harf yığınından oluşuyorsa (örn: "dtjshtagrvSV", "asdfgh", "şlkşlk"),
-- Veya anlamlı bir cümle yapısı yoksa,
-- Veya sadece tek bir kelimeyse ve bağlamı yoksa,
-ASLA YORUM YAPMA. Sadece şu cümleyi yaz ve dur:
-"Gördüğüm sislerin ardında net bir rüya seçemiyorum. Lütfen rüyanı anlaşılır cümlelerle tekrar yazar mısın?"
-
-ADIM 2: YORUMLA (Sadece Girdi Mantıklıysa)
-Eğer girdi geçerli bir rüyaysa, şu kurallara göre yorumla:
-1. **Uzun ve Detaylı Yaz:** En az 3-4 paragraf olsun. İnsanlar okumaya doyamasın.
-2. **Yapı:**
-   - Önce sembollerin gizli anlamlarını açıkla.
-   - Sonra bilinçaltı ve psikolojik durumunu analiz et.
-   - MUTLAKA "Gelecek Tavsiyesi" ver (Şuna dikkat et, bu fırsatı kaçırma gibi).
-3. **Kapanış:** Yorumun EN SONUNDA (başında değil) "Hayırlara vesile olsun..." cümlesiyle bitir.
-
-Üslubun mistik, bilge ve kucaklayıcı olsun. Asla yapay zeka olduğunu belli etme.
+GÜVENLİK FİLTRESİ (ÇOK ÖNEMLİ):
+Eğer kullanıcı klavyeye rastgele basmışsa (Örn: "asdfg", "şlkgşlskfg") veya rüya ile alakasız anlamsız bir şey yazmışsa, analiz yapma. 
+Sadece şu cevabı ver: "Gördüğüm sislerin ardında net bir rüya seçemiyorum. Lütfen rüyanı daha anlaşılır cümlelerle, detaylandırarak tekrar yazar mısın?"
+Ancak ufak yazım hatalarını (Örn: "rüyada kpek gördm") görmezden gel ve yorumla.
 """
 
 # ---------------------------------------------------------
 # 3. ARAYÜZ
 # ---------------------------------------------------------
-st.title("🌙 Kadim Rüya Tabircisi")
+st.title("🌙 Gizemli Rüya Tabircisi")
 st.markdown("""
 **Rüyalar, bilinçaltınızın size yazdığı gizli mektuplardır.**
 Onları açıp okumaya cesaretiniz var mı? Rüyanızı tüm detaylarıyla anlatın, şifrelerini çözelim.
 """)
 
-ruya_metni = st.text_area("Rüyanızı buraya detaylıca yazın:", height=200, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı...")
+# Metin kutusunu biraz daha büyüttük (height=200) ki kullanıcı uzun yazmaya teşvik edilsin
+ruya_metni = st.text_area("Rüyanızı buraya detaylıca yazın:", height=200, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı. Atın gözleri parlıyordu ve bana doğru koşmaya başladı...")
 
 if st.button("🔮 Kaderimi Yorumla 🔮", type="primary"):
     if not ruya_metni:
         st.warning("Lütfen yorumlanması için bir rüya yazın...")
-    elif len(ruya_metni) < 4: 
+    elif len(ruya_metni) < 5: # Çok kısa (örn: "a") girişleri engellemek için basit bir filtre
         st.warning("Lütfen rüyanızı biraz daha detaylı anlatın.")
     else:
+        # Heyecan ve Bekleme Süresi
         with st.spinner('Yıldız haritası inceleniyor... Sembollerin gizemi çözülüyor...'):
-            time.sleep(4) # Bekleme süresi
+            time.sleep(5) # 5 Saniye bekletme (İsteğe bağlı artırılabilir)
             
             try:
+                # OpenAI'a Bağlan
                 client = OpenAI(api_key=api_key)
                 
+                # İsteği Gönder
                 response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": ruya_metni}
                     ],
-                    temperature=0.5 # Yaratıcılığı biraz düşürdük ki saçmalamasın (0.5 ideal)
+                    temperature=0.7 # Yaratıcılık ayarı (0.7 iyidir)
                 )
                 
+                # Cevabı Al
                 yorum = response.choices[0].message.content
                 
-                # Eğer yapay zeka reddetme cümlesini kurduysa bunu Uyarı olarak göster
-                if "Gördüğüm sislerin ardında" in yorum:
-                    st.error("⚠️ Kâhin rüyanızı anlayamadı:")
-                    st.write(yorum)
+                # Eğer "Gördüğüm sislerin ardında..." cevabı geldiyse bunu uyarı olarak göster
+                if "Gördüğüm sislerin" in yorum:
+                    st.error(yorum)
                 else:
-                    # Başarılı yorum
+                    # Başarılı yorumu göster
                     st.success("Kâhin'in Analizi Hazır!")
                     st.markdown("---")
                     st.markdown(f"### 👁️ Rüyanızın Gizli Anlamı")
                     st.write(yorum)
                     st.markdown("---")
-                    st.info("💡 Bu yorum kadim bilgiler ışığında yapılmıştır, geleceğinize ışık tutması dileğiyle.")
+                    st.info("💡 İpucu: Rüyalarınızı ne kadar detaylı anlatırsanız, yorum o kadar isabetli olur.")
                 
             except Exception as e:
                 st.error("Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.")
+                # Hata detayını sadece geliştirici görsün diye commentledim
+                # st.write(e)
