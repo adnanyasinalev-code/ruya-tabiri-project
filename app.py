@@ -1,87 +1,109 @@
 import streamlit as st
 from openai import OpenAI
 import time
+import random
 
 # ---------------------------------------------------------
-# 1. PROFESYONEL SAYFA AYARLARI (SEO & GÖRÜNÜM)
+# 1. OTOMATİK SEO MOTORU (Python ile Binlerce Kelime Üretimi)
 # ---------------------------------------------------------
-# Sidebar (sol panel) kapalı, başlık ve ikon ayarlı
+def seo_keywords_olustur():
+    # Bu listeleri karıştırıp kombinasyon yapacağız
+    renkler = ["beyaz", "siyah", "kırmızı", "mavi", "yeşil", "sarı", "mor", "turuncu"]
+    nesneler = ["yılan", "köpek", "kedi", "fare", "at", "diş", "saç", "altın", "para", "bebek", "deniz", "kan", "ateş", "su", "ev", "araba", "uçak"]
+    eylemler = ["görmek", "ısırması", "kovalaması", "kaybetmek", "bulmak", "uçmak", "düşmek", "yemek", "almak", "vermek", "kırılması"]
+    baglamlar = ["diyanet", "islami", "ne anlama gelir", "tabiri", "yorumu", "psikolojik", "ihya", "nablusi"]
+    
+    kelime_havuzu = []
+    
+    # 1. Kombinasyon: Nesne + Eylem (Örn: Rüyada diş kırılması)
+    for nesne in nesneler:
+        for eylem in eylemler:
+            kelime_havuzu.append(f"rüyada {nesne} {eylem}")
+            
+    # 2. Kombinasyon: Renk + Nesne (Örn: Rüyada beyaz at)
+    for renk in renkler:
+        for nesne in nesneler:
+            kelime_havuzu.append(f"rüyada {renk} {nesne} görmek")
+
+    # 3. Kombinasyon: Nesne + Bağlam (Örn: Rüyada altın görmek diyanet)
+    for nesne in nesneler:
+        for baglam in baglamlar:
+            kelime_havuzu.append(f"rüyada {nesne} görmek {baglam}")
+
+    # Listeyi string'e çevirip virgülle ayırıyoruz
+    return ", ".join(kelime_havuzu)
+
+# SEO Metnini Hazırla
+generated_seo_text = seo_keywords_olustur()
+
+# ---------------------------------------------------------
+# 2. SAYFA AYARLARI VE GİZLİ SEO ENJEKSİYONU
+# ---------------------------------------------------------
 st.set_page_config(
     page_title="Mistik Rüya Tabircisi | İslami ve Psikolojik Rüya Yorumları",
     page_icon="🌙",
     layout="centered"
 )
 
-# --- GİZLİ SEO ÇALIŞMASI ---
-# Sol paneli yapmadık ama Google botları için anahtar kelimeleri
-# sayfanın en altına "görünmez" şekilde ekledik.
+# BURADA SENİN İSTEDİĞİN GİBİ BİNLERCE KELİMEYİ GİZLİCE GÖMÜYORUZ
 st.markdown(
-    """
-    <div style="visibility: hidden; height: 0px; overflow: hidden;">
-    Rüya tabirleri, rüya yorumu, İslami rüya tabiri, İbn-i Sirin, rüyamda ne gördüm, 
-    rüya analizi, istihare, rüya tabircisi, diyanet rüya tabirleri, 
-    psikolojik rüya yorumu, rüya manaları.
+    f"""
+    <div style="visibility: hidden; height: 0px; overflow: hidden; position: absolute;">
+    {generated_seo_text}
     </div>
     """,
     unsafe_allow_html=True
 )
 
 # ---------------------------------------------------------
-# 2. API ANAHTARI BAĞLANTISI
+# 3. API ANAHTARI VE SİSTEM PROMPT
 # ---------------------------------------------------------
 if "OPENAI_API_KEY" in st.secrets:
     api_key = st.secrets["OPENAI_API_KEY"]
 else:
-    # Bilgisayarında test ederken buraya kendi sk-... şifreni yazabilirsin.
-    api_key = "sk-proj-..." 
+    api_key = "sk-proj-..." # Local test için
 
-# ---------------------------------------------------------
-# 3. SİSTEM PROMPT (Senin İstediğin Özel Ayarlar)
-# ---------------------------------------------------------
 system_prompt = """
 Sen Kâhin adında, kadim bilgilere sahip bilge bir rüya tabircisisin.
 
 ÖNEMLİ KURAL: Yorum yaparken kullanıcıya "Sen", "Siz", "Senin" diye DOĞRUDAN HİTAP ETME. 
 Analizi genel bir dille veya üçüncü şahıs üzerinden yap. 
-(Örn: "Parana dikkat etmelisin" DEME -> "Bu sembol, maddi konulara dikkat edilmesi gerektiğine işaret eder" DE.)
 
 Görevin kullanıcıların rüyalarını şu yapıya göre yorumlamaktır:
 
-1. **Sembollerin Gizemi:** Rüyadaki nesnelerin (su, ateş, hayvan vb.) ne anlama geldiğini açıkla.
+1. **Sembollerin Gizemi:** Rüyadaki nesnelerin ne anlama geldiğini açıkla.
 
-2. **İslami Rüya Tabiri (İbn-i Sirin & Nablusi):** - Rüyayı İslami kaynaklara, İbn-i Sirin ve İmam Nablusi geleneğine göre analiz et.
+2. **İslami Rüya Tabiri (İbn-i Sirin & Nablusi):** - Rüyayı İslami kaynaklara göre analiz et.
    - BU BÖLÜMÜ OLABİLDİĞİNCE UZUN, DETAYLI VE DOYURUCU TUT. 
-   - Dini ve manevi sembolleri derinlemesine açıkla.
+   - Dini sembolleri derinlemesine açıkla.
 
-3. **Psikolojik Analiz (Bilinçaltı):** - Kişinin ruh halini, bilinçaltı mesajlarını modern psikoloji (Jung/Freud) açısından değerlendir.
+3. **Psikolojik Analiz (Bilinçaltı):** Kişinin bilinçaltı mesajlarını Jung/Freud açısından değerlendir.
 
-4. **Gelecek Tavsiyesi:** - Bu rüyadan yola çıkarak somut bir öğüt veya uyarı ver.
+4. **Gelecek Tavsiyesi:** Bu rüyadan yola çıkarak somut bir öğüt ver.
 
-5. **Kapanış:** - Yorumun EN SONUNDA (başında değil) mutlaka "Hayırlara vesile olsun..." cümlesiyle bitir.
+5. **Kapanış:** en son kişinin rüyasına göre detaylı bilinç altı analizini yap. Yorumun EN SONUNDA mutlaka "Hayırlara vesile olsun..." cümlesiyle bitir.
 
 Üslubun mistik, bilge, sakinleştirici ve edebi olsun. Asla yapay zeka olduğunu belli etme.
 """
 
 # ---------------------------------------------------------
-# 4. ARAYÜZ (Sol Panel Yok, Sade Tasarım)
+# 4. ARAYÜZ (Sade ve Sol Panelsiz)
 # ---------------------------------------------------------
 st.title("🌙 Kadim Rüya Tabircisi")
 
-# Yazı fontunu biraz güzelleştirelim
 st.markdown("""
 **Rüyalar, bilinçaltınızın size yazdığı gizli mektuplardır.**
 Onları açıp okumaya cesaretiniz var mı? Rüyanızı anlatın, **İbn-i Sirin** rüya tabirleri ve **Psikolojik gerçekler** ile rüyanızı detaylıca analiz ederek yorumlayalım. Şifrelerini çözelim.
 """)
 
-ruya_metni = st.text_area("Rüyanızı hem islami hem psikolojik yorumlayalım:", height=200, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı...")
+ruya_metni = st.text_area("Rüyanızı buraya yazın:", height=200, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı...")
 
-# Buton tasarımı senin istediğin gibi
 if st.button("𝑌𝑜𝑟𝑢𝑚𝑙𝑎", type="primary"):
     if not ruya_metni:
         st.warning("Lütfen yorumlanması için bir rüya yazın...")
     else:
         with st.spinner('Yıldızlar inceleniyor... Kadim kitaplar taranıyor...'):
-            time.sleep(3) # Heyecan süresi
+            time.sleep(3) 
             
             try:
                 client = OpenAI(api_key=api_key)
@@ -97,7 +119,6 @@ if st.button("𝑌𝑜𝑟𝑢𝑚𝑙𝑎", type="primary"):
                 
                 yorum = response.choices[0].message.content
                 
-                # Sonucu Göster
                 st.success("Kâhin'in Analizi Hazır!")
                 st.markdown("---")
                 st.markdown(f"### 👁️ Rüyanızın Gizli Anlamı")
@@ -107,4 +128,3 @@ if st.button("𝑌𝑜𝑟𝑢𝑚𝑙𝑎", type="primary"):
                 
             except Exception as e:
                 st.error("Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.")
-
