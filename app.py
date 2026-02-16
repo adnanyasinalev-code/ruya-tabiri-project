@@ -3,54 +3,103 @@ from openai import OpenAI
 import time
 
 # ---------------------------------------------------------
-# 1. AYARLAR
+# 1. PROFESYONEL SAYFA AYARLARI (SEO & GÖRÜNÜM)
 # ---------------------------------------------------------
-st.set_page_config(page_title="Derin Rüya Analizi", page_icon="🌙", layout="centered")
+st.set_page_config(
+    page_title="Mistik Rüya Tabircisi | Yapay Zeka Destekli Rüya Yorumları",
+    page_icon="🌙",
+    layout="centered",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://www.google.com/search?q=rüya+tabirleri',
+        'Report a bug': "mailto:yasin@example.com", # Buraya kendi mailini yazabilirsin
+        'About': "# Mistik Rüya Tabircisi\nBu uygulama yapay zeka teknolojisi ile **İslami** ve **Psikolojik** rüya analizi yapar."
+    }
+)
 
-# API Anahtarı Yönetimi (GitHub ve Bilgisayar Uyumlu)
+# --- GİZLİ SEO TAKTİĞİ (Görünmez Metin) ---
+# Google botları bu kelimeleri okur ama kullanıcı görmez (Sidebar'ın altına sakladık)
+st.sidebar.markdown(
+    """
+    <div style="font-size: 1px; color: #0e1117;">
+    Rüya tabirleri, rüya yorumu, islami rüya tabiri, rüyamda ne gördüm, 
+    rüya analizi, istihare, yapay zeka rüya, rüya tabircisi, 
+    diyanet rüya tabirleri, psikolojik rüya yorumu.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# ---------------------------------------------------------
+# 2. API ANAHTARI BAĞLANTISI
+# ---------------------------------------------------------
 if "OPENAI_API_KEY" in st.secrets:
     api_key = st.secrets["OPENAI_API_KEY"]
 else:
     # Bilgisayarında test ederken buraya kendi sk-... şifreni yazabilirsin.
-    # GitHub'a yüklerken burası boş kalsa da sorun olmaz.
     api_key = "sk-proj-..." 
 
 # ---------------------------------------------------------
-# 2. SİSTEM PROMPT (Filtresiz, Özgür ve Derin Beyin)
+# 3. YAN MENÜ (SIDEBAR) - Profesyonel Görünüm
+# ---------------------------------------------------------
+with st.sidebar:
+    st.image("https://cdn-icons-png.flaticon.com/512/4712/4712109.png", width=100) # Mistik bir logo
+    st.title("Mistik Rehber")
+    st.info("Bu uygulama **GPT-3.5 Yapay Zeka** teknolojisi kullanılarak geliştirilmiştir.")
+    
+    st.markdown("---")
+    st.write("### 🔍 Nasıl Çalışır?")
+    st.caption("1. Rüyanızı detaylıca yazın.")
+    st.caption("2. 'Yorumla' butonuna basın.")
+    st.caption("3. Kahve molası verin, analiz 5 saniyede hazır.")
+    
+    st.markdown("---")
+    st.write("Developed by **Yasin**")
+
+# ---------------------------------------------------------
+# 4. SİSTEM PROMPT (Gelişmiş Beyin)
 # ---------------------------------------------------------
 system_prompt = """
-Sen Kâhin adında, kadim bilgilere sahip bilge bir rüya tabircisisin. ama yorum sırasında kişiye hitap etme sadece yorumla.
-Görevin kullanıcıların rüyalarını İslami (İbn-i Sirin) ve Modern Psikoloji (Jung) senteziyle yorumlamak.
+Sen Kâhin adında, kadim bilgilere sahip bilge bir rüya tabircisisin.
+Görevin kullanıcıların rüyalarını İslami (İbn-i Sirin, İmam Nablusi) ve Modern Psikoloji (Jung, Freud) senteziyle yorumlamak.
 
-KURALLARIN ŞUNLARDIR:
+KURALLAR:
+1. **Her Şeyi Yorumla:** Kullanıcı ne yazarsa yazsın, içinden bir sembol bul ve yorumla.
+2. **Derinlik:** Cevabın en az 3 paragraf olsun.
+3. **Format:**
+   - **🔮 Sembollerin Dili:** Rüyadaki nesnelerin anlamı.
+   - **🧠 Bilinçaltı Analizi:** Psikolojik durum.
+   - **✨ Gelecek Tavsiyesi:** Somut öneriler ver.
+4. **Kapanış:** En sonda "Hayırlara vesile olsun..." de.
 
-2. Uzun ve Doyurucu Yaz: Kullanıcı okurken büyülensin.
-
-    Rüyadaki nesnelerin (su, ateş, hayvan vb.) ne anlama geldiğini açıkla.
-   - **Bilinçaltı Mesajı:** Kişinin ruh halini ve iç dünyasını analiz et. rüyayı ibn-i sirin gibi islam alimlerinin şekliyle yorumla yani islam açısından bir yorum yap. islami açıdan yorumu olabildiğince uzun tut ve analiz edip yorumla. bir de psikoloijk açıdan yorumunu yap
-   - **Gelecek Tavsiyesi:** Bu rüyadan yola çıkarak kişiye somut bir öğüt ver (Örn: "Parana dikkat et", "Bu hafta yeni başlangıçlar yap" gibi).
-4. **Kapanış:** Yorumun EN SONUNDA (başında değil) mutlaka "Hayırlara vesile olsun..." cümlesiyle bitir.
-
-Üslubun mistik, bilge, sakinleştirici ve edebi olsun. Asla yapay zeka olduğunu belli etme.
+Üslubun mistik, bilge ve sürükleyici olsun.
 """
 
 # ---------------------------------------------------------
-# 3. ARAYÜZ
+# 5. ANA EKRAN TASARIMI
 # ---------------------------------------------------------
-st.title("🌙 Kadim Rüya Tabircisi")
+st.title("🌙 Mistik Rüya Tabircisi")
 st.markdown("""
-**Rüyalar, bilinçaltınızın size yazdığı gizli mektuplardır.**
-Onları açıp okumaya cesaretiniz var mı? Rüyanızı anlatın, İbn-i sirin rüya tabirleri ve psikolojik gerçekler ile rüyanızı detaylıca analiz ederek yorumlayalım. Şifrelerini çözelim.
-""")
+<style>
+.big-font {
+    font-size:18px !important;
+    color: #ececec;
+}
+</style>
+""", unsafe_allow_html=True)
 
-ruya_metni = st.text_area("Rüyanızı buraya yazın:", height=200, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı...")
+st.markdown('<p class="big-font">Bilinçaltınızın size yazdığı gizli mektupları okumaya hazır mısınız? Rüyanızı anlatın, kadim bilgiler ışığında çözelim.</p>', unsafe_allow_html=True)
 
-if st.button("𝑌𝑜𝑟𝑢𝑚𝑙𝑎", type="primary"):
+st.divider() # Şık bir çizgi çeker
+
+ruya_metni = st.text_area("✍️ Rüyanızı buraya detaylıca yazın:", height=180, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, gökyüzünde iki tane ay vardı...")
+
+if st.button("🔮 Kaderimi Yorumla 🔮", type="primary", use_container_width=True):
     if not ruya_metni:
         st.warning("Lütfen yorumlanması için bir rüya yazın...")
     else:
-        with st.spinner('Yıldız inceleniyor...'):
-            time.sleep(3) # Biraz heyecan olsun
+        with st.spinner('Yıldız haritası inceleniyor... Sembollerin gizemi çözülüyor...'):
+            time.sleep(3)
             
             try:
                 client = OpenAI(api_key=api_key)
@@ -61,24 +110,17 @@ if st.button("𝑌𝑜𝑟𝑢𝑚𝑙𝑎", type="primary"):
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": ruya_metni}
                     ],
-                    temperature=0.7 # Yaratıcılığı biraz artırdık (0.7) ki güzel yorumlasın
+                    temperature=0.7
                 )
                 
                 yorum = response.choices[0].message.content
                 
-                # Sonucu Göster
-                st.success("Kâhin'in Analizi Hazır!")
-                st.markdown("---")
-                st.markdown(f"### 👁️ Rüyanızın Gizli Anlamı")
-                st.write(yorum)
-                st.markdown("---")
-                st.info("💡 Bu yorum kadim bilgiler ışığında yapılmıştır, geleceğinize ışık tutması dileğiyle.")
+                # Sonucu Göster (Şık bir kutu içinde)
+                st.success("Analiz Tamamlandı!")
+                with st.expander("👁️ Kâhin'in Yorumunu Oku", expanded=True):
+                    st.markdown(yorum)
+                
+                st.info("💡 Not: Bu yorum yapay zeka desteklidir. Gerçek hayat kararlarınızı etkilememelidir.")
                 
             except Exception as e:
                 st.error("Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.")
-
-
-
-
-
-
