@@ -19,7 +19,7 @@ else:
 # 2. SİSTEM PROMPT (Filtresiz, Özgür ve Derin Beyin)
 # ---------------------------------------------------------
 system_prompt = """
-Sen Kâhin adında, kadim bilgilere sahip bilge bir rüya tabircisisin.
+Sen Kâhin adında, kadim bilgilere sahip bilge bir rüya tabircisisin. ama yorum sırasında kişiye hitap etme sadece yorumla.
 Görevin kullanıcıların rüyalarını İslami (İbn-i Sirin) ve Modern Psikoloji (Jung) senteziyle yorumlamak.
 
 KURALLARIN ŞUNLARDIR:
@@ -76,5 +76,6 @@ if st.button("🔮 Kaderimi Yorumla 🔮", type="primary"):
                 
             except Exception as e:
                 st.error("Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.")
+
 
 
