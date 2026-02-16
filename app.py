@@ -45,7 +45,7 @@ Onları açıp okumaya cesaretiniz var mı? Rüyanızı anlatın, İbn-i sirin r
 
 ruya_metni = st.text_area("Rüyanızı buraya yazın:", height=200, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı...")
 
-if st.button("𝓨𝓸𝓻𝓾𝓶𝓵𝓪", type="primary"):
+if st.button("𝑌𝑜𝑟𝑢𝑚𝑙𝑎", type="primary"):
     if not ruya_metni:
         st.warning("Lütfen yorumlanması için bir rüya yazın...")
     else:
@@ -76,6 +76,7 @@ if st.button("𝓨𝓸𝓻𝓾𝓶𝓵𝓪", type="primary"):
                 
             except Exception as e:
                 st.error("Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.")
+
 
 
 
