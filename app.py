@@ -27,7 +27,7 @@ KURALLARIN ŞUNLARDIR:
 2. Uzun ve Doyurucu Yaz: Kullanıcı okurken büyülensin.
 
     Rüyadaki nesnelerin (su, ateş, hayvan vb.) ne anlama geldiğini açıkla.
-   - **Bilinçaltı Mesajı:** Kişinin ruh halini ve iç dünyasını analiz et. rüyayı ibn-i sirin gibi islam alimlerinin şekliyle yorumla yani islam açısından bir yorum yap. bir de psikoloijk açıdan yorumunu yap
+   - **Bilinçaltı Mesajı:** Kişinin ruh halini ve iç dünyasını analiz et. rüyayı ibn-i sirin gibi islam alimlerinin şekliyle yorumla yani islam açısından bir yorum yap. islami açıdan yorumu olabildiğince uzun tut ve analiz edip yorumla. bir de psikoloijk açıdan yorumunu yap
    - **Gelecek Tavsiyesi:** Bu rüyadan yola çıkarak kişiye somut bir öğüt ver (Örn: "Parana dikkat et", "Bu hafta yeni başlangıçlar yap" gibi).
 4. **Kapanış:** Yorumun EN SONUNDA (başında değil) mutlaka "Hayırlara vesile olsun..." cümlesiyle bitir.
 
@@ -76,4 +76,5 @@ if st.button("🔮 Kaderimi Yorumla 🔮", type="primary"):
                 
             except Exception as e:
                 st.error("Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.")
+
 
