@@ -40,16 +40,16 @@ KURALLARIN ŞUNLARDIR:
 st.title("🌙 Kadim Rüya Tabircisi")
 st.markdown("""
 **Rüyalar, bilinçaltınızın size yazdığı gizli mektuplardır.**
-Onları açıp okumaya cesaretiniz var mı? Rüyanızı anlatın, şifrelerini çözelim.
+Onları açıp okumaya cesaretiniz var mı? Rüyanızı anlatın, İbn-i sirin rüya tabirleri ve psikolojik gerçekler ile rüyanızı detaylıca analiz ederek yorumlayalım. Şifrelerini çözelim.
 """)
 
 ruya_metni = st.text_area("Rüyanızı buraya yazın:", height=200, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı...")
 
-if st.button("🔮 Kaderimi Yorumla 🔮", type="primary"):
+if st.button("𝚈𝚘𝚛𝚞𝚖𝚕𝚊", type="primary"):
     if not ruya_metni:
         st.warning("Lütfen yorumlanması için bir rüya yazın...")
     else:
-        with st.spinner('Yıldız haritası inceleniyor... Sembollerin gizemi çözülüyor...'):
+        with st.spinner('Yıldız inceleniyor...'):
             time.sleep(3) # Biraz heyecan olsun
             
             try:
@@ -76,6 +76,7 @@ if st.button("🔮 Kaderimi Yorumla 🔮", type="primary"):
                 
             except Exception as e:
                 st.error("Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.")
+
 
 
 
