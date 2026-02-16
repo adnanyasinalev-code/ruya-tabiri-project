@@ -73,7 +73,7 @@ st.markdown("""
 Onları açıp okumaya cesaretiniz var mı? Rüyanızı anlatın, **İbn-i Sirin** rüya tabirleri ve **Psikolojik gerçekler** ile rüyanızı detaylıca analiz ederek yorumlayalım. Şifrelerini çözelim.
 """)
 
-ruya_metni = st.text_area("Rüyanızı buraya yazın:", height=200, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı...")
+ruya_metni = st.text_area("Rüyanızı hem islami hem psikolojik yorumlayalım:", height=200, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı...")
 
 # Buton tasarımı senin istediğin gibi
 if st.button("𝑌𝑜𝑟𝑢𝑚𝑙𝑎", type="primary"):
@@ -107,3 +107,4 @@ if st.button("𝑌𝑜𝑟𝑢𝑚𝑙𝑎", type="primary"):
                 
             except Exception as e:
                 st.error("Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.")
+
