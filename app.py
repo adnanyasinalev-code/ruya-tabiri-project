@@ -2,120 +2,78 @@ import streamlit as st
 from openai import OpenAI
 import time
 import random
+import json
 
 # ---------------------------------------------------------
-# 1. MEGA SEO MOTORU (Spesifik ve Uzun Kuyruklu Kelimeler)
+# 1. MEGA SEO MOTORU (JSON-LD ve Semantik Yapı)
 # ---------------------------------------------------------
-def seo_keywords_olustur():
-    # KATEGORİ 1: RENKLER VE SIFATLAR (Detaylı)
-    sifatlar = [
-        "kocaman", "küçücük", "yavru", "vahşi", "ölü", "canlı", "konuşan", "uçan", "yaralı", 
-        "hamile", "ağlayan", "gülen", "çıplak", "eski", "yeni", "kirli", "temiz",
-        "zifiri siyah", "bembeyaz", "kan kırmızısı", "altın sarısı", "bebek mavisi", 
-        "turkuaz", "mor", "gümüş rengi", "bakır", "haki yeşil", "bulanık", "berrak"
+def seo_icerik_olustur():
+    # Uzun kuyruklu ve yüksek hacimli arama terimleri
+    populer_ruyalar = [
+        "Rüyada yılan görmek diyanet", "Rüyada eski sevgiliyi görmek psikolojik yorumu",
+        "Rüyada ağlamak ne anlama gelir", "Rüyada altın bulmak imam nablusi",
+        "Rüyada deniz görmek ihya", "Rüyada köpek ısırması",
+        "Rüyada diş kırılması ne demek", "Rüyada ölmüş birini görmek",
+        "Rüyada hamile olduğunu görmek islami", "Rüyada kedi sevmek",
+        "Rüyada uçmak psikolojik anlamı", "Rüyada saç kestirmek"
     ]
     
-    # KATEGORİ 2: EN ÇOK ARANAN NESNELER VE VARLIKLAR
-    nesneler = [
-        # Hayvanlar
-        "yılan", "kara yılan", "sarı akrep", "kurt", "ayı", "bit", "pire", "hamam böceği", 
-        "kuduz köpek", "siyah kedi", "beyaz güvercin", "yarasa", "örümcek", "timsah", "aslan", 
-        "fare", "inek", "dana", "kurbanlık koyun", "at", "balık", "yunus",
-        # Vücut ve Sağlık
-        "diş", "azı dişi", "ön diş", "saç", "uzun saç", "kel kafa", "göz", "mavi göz", 
-        "kan", "adet kanı", "tırnak", "ayak", "el", "bebek", "erkek bebek", "kız bebek",
-        # Doğa ve Afetler
-        "deniz", "dalgalı deniz", "tsunami", "deprem", "yangın", "sel", "kar", "fırtına", 
-        "yağmur", "çamur", "toprak", "mezar", "gökyüzü", "yıldız", "dolunay",
-        # Maddi Şeyler
-        "altın", "çeyrek altın", "bilezik", "yüzük", "tektaş", "kağıt para", "dolar", 
-        "bozuk para", "cüzdan", "ayakkabı", "topuklu ayakkabı", "gelinlik", "damatlık", 
-        "yeni araba", "kırmızı araba", "eski ev", "büyük ev", "anahtar", "kapı",
-        # Yiyecekler
-        "ekmek", "et", "çiğ et", "süt", "yumurta", "bal", "zeytin", "incir", "üzüm", "elma"
-    ]
-    
-    # KATEGORİ 3: EYLEMLER VE OLAYLAR (Dramatik ve Merak Edilenler)
-    eylemler = [
-        "görmek", "ısırması", "kovalaması", "saldırması", "öldürmek", "sevmek", "beslemek",
-        "kaybetmek", "bulmak", "çalmak", "hediye almak", "vermek", "satın almak",
-        "düşmek", "yüksekten düşmek", "uçmak", "yüzmek", "boğulmak", "yanmak",
-        "kırılması", "dökülmesi", "kanaması", "ağrıması", "çekilmesi",
-        "evlenmek", "nişanlanmak", "boşanmak", "aldatılmak", "terk edilmek",
-        "ağlamak", "hıçkırarak ağlamak", "gülmek", "kavga etmek", "barışmak",
-        "namaz kılmak", "dua etmek", "hacca gitmek", "camiye girmek", "ezan okumak"
-    ]
-    
-    # KATEGORİ 4: KİŞİLER (Kim Görüldü?)
-    kisiler = [
-        "eski sevgili", "eski eş", "platonik aşk", "anne", "baba", "ölmüş baba", 
-        "ölmüş anne", "kardeş", "abi", "abla", "düşman", "patron", "cumhurbaşkanı", 
-        "ünlü biri", "tanımadık adam", "tanımadık kadın", "hırsız", "cin", "şeytan", "melek"
-    ]
-    
-    # KATEGORİ 5: ARAMA BAĞLAMLARI (Google'a Ne Yazıyorlar?)
-    baglamlar = [
-        "diyanet rüya tabirleri", "islami rüya yorumu", "ne anlama gelir", 
-        "rüya tabiri sözlüğü", "imam nablusi yorumu", "ibn-i sirin rüya tabiri", 
-        "psikolojik yorumu", "dini anlamı", "rüya manaları", "ihya rüya tabirleri",
-        "gerçek rüya yorumu", "rüya analizi yapay zeka"
-    ]
-    
-    kelime_havuzu = []
-    
-    # KOMBİNASYON MOTORU (Binlerce cümle üretir)
-    
-    # 1. En popüler kombinasyon: Sifat + Nesne + Eylem + Bağlam
-    # Örn: "Rüyada zifiri siyah yılan ısırması diyanet"
-    for _ in range(300): # Rastgele 300 kombinasyon
-        cumle = f"rüyada {random.choice(sifatlar)} {random.choice(nesneler)} {random.choice(eylemler)} {random.choice(baglamlar)}"
-        kelime_havuzu.append(cumle)
+    # Kategori bazlı SEO kelimeleri (UI için)
+    kategoriler = {
+        "Hayvanlar": ["Yılan", "Köpek", "Kedi", "Fare", "Akrep", "Aslan", "Güvercin", "Balık"],
+        "Doğa & Olaylar": ["Deprem", "Deniz", "Sel", "Yangın", "Yağmur", "Kar", "Uçmak", "Düşmek"],
+        "Kişiler & Vücut": ["Eski Sevgili", "Ölmüş Anne/Baba", "Diş Kırılması", "Kan Görmek", "Bebek Emzirmek", "Saç Dökülmesi"],
+        "Nesneler": ["Altın", "Para", "Yüzük", "Araba", "Ev Almak", "Gelinlik Giymek", "Ayakkabı"]
+    }
 
-    # 2. Kişi Odaklı Kombinasyon
-    # Örn: "Rüyada eski sevgiliyi görmek ne anlama gelir"
-    for kisi in kisiler:
-        kelime_havuzu.append(f"rüyada {kisi} görmek {random.choice(baglamlar)}")
-        kelime_havuzu.append(f"rüyada {kisi} ile konuşmak")
-        kelime_havuzu.append(f"rüyada {kisi} ile kavga etmek")
+    # Google Botları İçin JSON-LD (FAQ Schema) Oluşturucu
+    # Bu kod, Google arama sonuçlarında sitenin altında "Sık Sorulan Sorular" çıkmasını sağlar.
+    faq_schema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": []
+    }
+    
+    for ruya in populer_ruyalar:
+        faq_schema["mainEntity"].append({
+            "@type": "Question",
+            "name": f"{ruya} ne anlama gelir?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": f"{ruya} konusu, hem İslami rüya tabirleri (İbn-i Sirin, İmam Nablusi) hem de psikolojik bilinçaltı analizleriyle sitemizde yapay zeka tarafından detaylıca yorumlanmaktadır."
+            }
+        })
 
-    # 3. Nesne Odaklı (Basit Aramalar)
-    for nesne in nesneler:
-        kelime_havuzu.append(f"rüyada {nesne} görmek")
-        kelime_havuzu.append(f"rüyada {nesne} ne demek")
+    return kategoriler, json.dumps(faq_schema, ensure_ascii=False)
 
-    # Listeyi birleştir
-    return ", ".join(kelime_havuzu)
-
-# SEO Metnini Hazırla
-generated_seo_text = seo_keywords_olustur()
+kategoriler, json_ld_schema = seo_icerik_olustur()
 
 # ---------------------------------------------------------
-# 2. SAYFA AYARLARI
+# 2. SAYFA AYARLARI VE SEO METADATA
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="Mistik Rüya Tabircisi | İslami ve Psikolojik Rüya Yorumları",
+    page_title="Rüya Tabirleri ve Psikolojik Yorumlar | Mistik Kâhin",
     page_icon="🌙",
     layout="centered"
 )
 
-# GİZLİ SEO ENJEKSİYONU (Kullanıcı Görmez, Google Görür)
+# JSON-LD ŞEMASINI SİTEYE GÖM (Kullanıcı görmez, Google Botları okur)
 st.markdown(
     f"""
-    <div style="visibility: hidden; height: 1px; width: 1px; overflow: hidden; position: absolute; top: 0; left: 0;">
-    {generated_seo_text}
-    </div>
+    <script type="application/ld+json">
+    {json_ld_schema}
+    </script>
     """,
     unsafe_allow_html=True
 )
 
 # ---------------------------------------------------------
-# 3. API ve SİSTEM
+# 3. API VE SİSTEM YAPILANDIRMASI
 # ---------------------------------------------------------
-if "OPENAI_API_KEY" in st.secrets:
-    api_key = st.secrets["OPENAI_API_KEY"]
-else:
-    api_key = "sk-proj-..." 
-
+# API Key'i Streamlit Secrets'tan al (Sunucuda ortam değişkeni olarak ayarlanmalı)
+# API Key'i Streamlit Secrets'tan al (Güvenli Yöntem)
+api_key = st.secrets["OPENAI_API_KEY"]
+client = OpenAI(api_key=api_key)
 system_prompt = """
 Sen Kâhin adında, kadim bilgilere sahip bilge bir rüya tabircisisin.
 
@@ -123,47 +81,42 @@ Sen Kâhin adında, kadim bilgilere sahip bilge bir rüya tabircisisin.
 Analizi genel bir dille veya üçüncü şahıs üzerinden yap. 
 (Örn: "Parana dikkat etmelisin" DEME -> "Bu rüya, maddi konulara özen gösterilmesi gerektiğine işaret eder" DE.)
 
-Görevin kullanıcıların rüyalarını şu yapıya göre yorumlamaktır:
+Görevin rüyaları şu yapıya göre yorumlamaktır:
 
-1. **Sembollerin Gizemi:** Rüyadaki nesnelerin ne anlama geldiğini uzunca açıkla.
+1. **Sembollerin Gizemi:** Rüyadaki nesnelerin genel manası.
+2. **İslami Rüya Tabiri (İbn-i Sirin & Nablusi):** İslami kaynaklara göre dini ve derin analiz (Uzun tut).
+3. **Psikolojik Analiz (Bilinçaltı):** Kişinin ruh halinin Jung/Freud açısından değerlendirmesi.
+4. **Gelecek Tavsiyesi:** Somut ve pozitif bir öğüt.
+5. **Kapanış:** Rüyaya göre kişinin bilinçaltı analizi. Mutlaka "Hayırlara vesile olsun..." ile bitir.
 
-2. **İslami Rüya Tabiri (İbn-i Sirin & Nablusi):** - Rüyayı İslami kaynaklara, İbn-i Sirin ve İmam Nablusi geleneğine göre detaylıca analiz et.
-   - BU BÖLÜMÜ OLABİLDİĞİNCE UZUN, DETAYLI VE DOYURUCU TUT. 
-   - Dini sembolleri derinlemesine açıkla.
-
-3. **Psikolojik Analiz (Bilinçaltı):** Kişinin ruh halini Jung/Freud açısından değerlendir.
-
-4. **Gelecek Tavsiyesi:** Somut bir öğüt ver.
-
-5. **Kapanış:**  en son rüyaya göre kişinin bilinç altı analizini yap. detaylı olsun.Yorumun EN SONUNDA mutlaka "Hayırlara vesile olsun..." cümlesiyle bitir.
-
-Üslubun mistik, bilge, sakinleştirici ve edebi olsun. Asla yapay zeka olduğunu belli etme.
+Üslubun mistik, bilge ve edebi olsun. Asla bir yapay zeka olduğunu belli etme.Ve genel olarak tüm analizi çok uzun yap.
 """
 
 # ---------------------------------------------------------
-# 4. ARAYÜZ (Sade)
+# 4. ARAYÜZ (Kullanıcı Deneyimi)
 # ---------------------------------------------------------
 st.title("🌙 Kadim Rüya Tabircisi")
 
 st.markdown("""
 **Rüyalar, bilinçaltınızın size yazdığı gizli mektuplardır.**
-Onları açıp okumaya cesaretiniz var mı? Rüyanızı anlatın, **İbn-i Sirin** rüya tabirleri ve **Psikolojik gerçekler** ile rüyanızı detaylıca analiz ederek yorumlayalım. Şifrelerini çözelim.
+Rüyanızı detaylıca anlatın; **İbn-i Sirin**, **İmam Nablusi** kaynakları ve modern **psikolojik analizler** ışığında rüyanızın şifrelerini çözelim.
 """)
 
-ruya_metni = st.text_area("Rüyanızı buraya yazın:", height=200, placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı...")
+ruya_metni = st.text_area(
+    "Rüyanızı buraya yazın:", 
+    height=150, 
+    placeholder="Örn: Gece karanlık bir ormanda yürüyordum, birden karşıma beyaz bir at çıktı..."
+)
 
-if st.button("𝑌𝑜𝑟𝑢𝑚𝑙𝑎", type="primary"):
-    if not ruya_metni:
-        st.warning("Lütfen yorumlanması için bir rüya yazın...")
+if st.button("Rüyayı Yorumla ✨", type="primary"):
+    if not ruya_metni or len(ruya_metni) < 5:
+        st.warning("Lütfen yorumlanması için geçerli ve detaylı bir rüya yazın...")
     else:
-        with st.spinner('Yıldızlar inceleniyor... Kadim kitaplar taranıyor...'):
-            time.sleep(3) 
-            
+        with st.spinner('Kadim kitaplar taranıyor, yıldızlar inceleniyor...'):
             try:
-                client = OpenAI(api_key=api_key)
-                
+                # GPT-4o-mini modeli ile daha ucuz ve daha zeki yanıt
                 response = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
+                    model="gpt-4o-mini",
                     messages=[
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": ruya_metni}
@@ -175,10 +128,46 @@ if st.button("𝑌𝑜𝑟𝑢𝑚𝑙𝑎", type="primary"):
                 
                 st.success("Kâhin'in Analizi Hazır!")
                 st.markdown("---")
-                st.markdown(f"### 👁️ Rüyanızın Gizli Anlamı")
+                st.markdown("### 👁️ Rüyanızın Gizli Anlamı")
                 st.write(yorum)
                 st.markdown("---")
-                st.info("💡 Bu yorum kadim bilgiler ışığında yapılmıştır, geleceğinize ışık tutması dileğiyle.")
+                st.info("💡 Bu yorum, islami rüya tabirleri sözlüğü ve psikolojik arketipler ışığında yapay zeka destekli hazırlanmıştır.")
                 
             except Exception as e:
-                st.error("Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.")
+                st.error("Kadim parşömenler okunamadı (API Bağlantı Hatası). Lütfen tekrar deneyin.")
+                st.error(f"Hata detayı: {e}")
+
+# ---------------------------------------------------------
+# 5. GÖRÜNÜR SEO ALANI (Google Botları ve Kullanıcılar İçin)
+# ---------------------------------------------------------
+st.markdown("<br><br>", unsafe_allow_html=True)
+with st.expander("📌 Rüya Tabirleri Ansiklopedisi (Sık Arananlar)"):
+    st.markdown("""
+    *Bu bölüm, sitemizde en çok aranan rüya sembollerini ve diyanet onaylı islami rüya tabirleri konularını içermektedir. Rüyada görülen sembollerin psikolojik ve dini anlamlarını yukarıdaki arama motorumuzdan öğrenebilirsiniz.*
+    """)
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown("**Hayvanlar & Doğa**")
+        for kelime in kategoriler["Hayvanlar"]:
+            st.markdown(f"- Rüyada {kelime} Görmek")
+            
+    with col2:
+        st.markdown("**Olaylar & Afetler**")
+        for kelime in kategoriler["Doğa & Olaylar"]:
+            st.markdown(f"- Rüyada {kelime}")
+            
+    with col3:
+        st.markdown("**Kişiler & Durumlar**")
+        for kelime in kategoriler["Kişiler & Vücut"]:
+            st.markdown(f"- Rüyada {kelime}")
+            
+    with col4:
+        st.markdown("**Eşyalar & Nesneler**")
+        for kelime in kategoriler["Nesneler"]:
+            st.markdown(f"- Rüyada {kelime}")
+            
+    st.markdown("""
+    **Neden Bizi Tercih Etmelisiniz?** İmam Nablusi, İbn-i Sirin ve Seyyid Süleyman gibi büyük alimlerin kaynaklarını tarayarak rüya analizi yaparız.
+    """)
